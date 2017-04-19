@@ -1,8 +1,35 @@
 'use strict'
 
 const test = require('ava')
+const nock = require('nock')
 const emagram = require('../')
-//  const fixtures = require('./fixtures')
+const fixtures = require('./fixtures')
+
+let options = {
+  endpoints: {
+    pictures: 'http://emagram.test/picture',
+    users: 'http://emagram.test/user',
+    auth: 'http://emagram.test/auth'
+  }
+}
+
+test.beforeEach(t => {
+  t.context.client = emagram.createClient(options)
+})
+
+test('getPicture', async t => {
+  const client = t.context.client
+
+  let image = fixtures.getImage()
+
+  nock(options.endpoints.pictures)
+    .get(`/${image.publicId}`)
+    .reply(200, image)
+
+  let result = await client.getPicture(image.publicId)
+
+  t.deepEqual(image, result)
+})
 
 test('client', t => {
   const client = emagram.createClient()

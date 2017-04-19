@@ -4,11 +4,11 @@
   "description": "Emagram API Client",
   "main": "index.js",
   "scripts": {
-    "lint":"standard",
+    "lint": "standard",
     "test": "npm run lint && ava"
   },
   "standard": {
-    "parser":"babel-eslint"
+    "parser": "babel-eslint"
   },
   "repository": {
     "type": "git",
@@ -23,7 +23,13 @@
   "devDependencies": {
     "ava": "^0.19.1",
     "babel-eslint": "^7.2.2",
+    "nock": "^9.0.13",
     "standard": "^10.0.2",
     "uuid-base62": "^0.1.0"
+  },
+  "dependencies": {
+    "bluebird": "^3.5.0",
+    "request": "^2.81.0",
+    "request-promise": "^4.2.0"
   }
 }
