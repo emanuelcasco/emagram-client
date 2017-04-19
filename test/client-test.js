@@ -31,6 +31,30 @@ test('getPicture', async t => {
   t.deepEqual(image, result)
 })
 
+test('savePicture', async t => {
+  const client = t.context.client
+
+  let token = 'xxx-xxxx-xxx'
+  let image = fixtures.getImage()
+
+  let newImage = {
+    src: image.src,
+    description: image.description
+  }
+
+  nock(options.endpoints.pictures, {
+    reqheaders: {
+      'Authorization': `Bearer ${token}`
+    }
+  })
+    .post('/', newImage)
+    .reply(201, image)
+
+  let result = await client.savePicture(newImage, token)
+
+  t.deepEqual(result, image)
+})
+
 test('client', t => {
   const client = emagram.createClient()
 
