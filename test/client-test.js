@@ -100,6 +100,58 @@ test('listPicturesByTag', async t => {
   t.deepEqual(images, result)
 })
 
+test('saveUser', async t => {
+  const client = t.context.client
+
+  let user = fixtures.getUser()
+  let newUser = {
+    username: user.username,
+    name: user.name,
+    email: 'user@emagram.com',
+    password: 'em4gram'
+  }
+
+  nock(options.endpoints.users)
+    .post('/', newUser)
+    .reply(201, user)
+
+  let result = await client.saveUser(newUser)
+
+  t.deepEqual(result, user)
+})
+
+test('getUser', async t => {
+  const client = t.context.client
+
+  let user = fixtures.getUser()
+
+  nock(options.endpoints.users)
+    .get(`/${user.username}`)
+    .reply(200, user)
+
+  let result = await client.getUser(user.username)
+
+  t.deepEqual(user, result)
+})
+
+test('auth', async t => {
+  const client = t.context.client
+
+  let token = 'xxx-xxxx-xxx'
+  let credentials = {
+    username: 'emanuel',
+    password: 'em4gram'
+  }
+
+  nock(options.endpoints.auth)
+    .post('/', credentials)
+    .reply(200, token)
+
+  let result = await client.auth(credentials.username, credentials.password)
+
+  t.deepEqual(result, token)
+})
+
 test('client', t => {
   const client = emagram.createClient()
 
