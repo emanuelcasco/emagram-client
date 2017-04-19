@@ -55,6 +55,22 @@ test('savePicture', async t => {
   t.deepEqual(result, image)
 })
 
+test('likePicture', async t => {
+  const client = t.context.client
+
+  let image = fixtures.getImage()
+  image.liked = true
+  image.likes += 1
+
+  nock(options.endpoints.pictures)
+    .post(`/${image.publicId}/like`)
+    .reply(200, image)
+
+  let result = await client.likePicture(image.publicId)
+
+  t.deepEqual(image, result)
+})
+
 test('client', t => {
   const client = emagram.createClient()
 
