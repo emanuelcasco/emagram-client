@@ -71,6 +71,35 @@ test('likePicture', async t => {
   t.deepEqual(image, result)
 })
 
+test('listPictures', async t => {
+  const client = t.context.client
+
+  let images = fixtures.getImages(5)
+
+  nock(options.endpoints.pictures)
+    .get('/list')
+    .reply(200, images)
+
+  let result = await client.listPictures()
+
+  t.deepEqual(images, result)
+})
+
+test('listPicturesByTag', async t => {
+  const client = t.context.client
+
+  let images = fixtures.getImages(5)
+  let tag = 'emagram'
+
+  nock(options.endpoints.pictures)
+    .get(`/tag/${tag}`)
+    .reply(200, images)
+
+  let result = await client.listPicturesByTag(tag)
+
+  t.deepEqual(images, result)
+})
+
 test('client', t => {
   const client = emagram.createClient()
 
